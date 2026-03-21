@@ -1,4 +1,5 @@
 A fast CI/CD tool for uploading, invoking, and logging lambdas - without having to wait on GitHub Actions. Intended for testing which would be small enough to be a pain for git commits/pushes.
+<img width="1170" height="445" alt="screenshot" src="screenshot.png" />
 
 ## Global Usage
 - Put the deploy file somewhere permanent. The file is a bash shell script but **leave it without any extension** (ex: `"C:\Users\scale\Files\Dev\deploy\deploy"`)
