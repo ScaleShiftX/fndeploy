@@ -1,0 +1,84 @@
+FUNCTION_NAME=$(basename "$(pwd -W 2>/dev/null || pwd)")
+export MSYS_NO_PATHCONV=1
+rm -f function.zip
+
+#Zip
+echo -n -e "Zipping $FUNCTION_NAME..."
+zip -r -q function.zip .
+echo -n -e "\r\033[K" #Wipe the previous line
+
+#Upload
+echo -n -e "Uploading $FUNCTION_NAME..."
+aws lambda update-function-code --function-name "$FUNCTION_NAME" --zip-file fileb://function.zip > /dev/null
+echo -n -e "\r\033[K" #Wipe the previous line
+
+sleep 0.2 #Give a moment for AWS to update the code
+
+#Invoke and log (with colouring)
+aws lambda invoke \
+  --function-name "$FUNCTION_NAME" \
+  --log-type Tail \
+  response.json \
+  --query 'LogResult' \
+  --output text | base64 --decode 2>/dev/null | awk '
+BEGIN {
+	in_error=0
+}
+
+{
+	#Remove prefix: timestamp + container 
+	gsub(/^[0-9T:\.\+\-]+ [0-9\/]+\[\$LATEST\][a-f0-9]+ /, "", $0)
+
+	#Remove request IDs
+	gsub(/[a-f0-9\-]{36}/, "", $0)
+
+	#Skip excess start and end lines
+	if ($0 ~ /^(INIT_START|START RequestId|END RequestId)/) next
+}
+
+#Colour errors
+/ERROR/ {
+  in_error=1
+  print "\033[31m" $0 "\033[0m"
+  next
+}
+
+/^[[:space:]]+at / {
+	if (in_error) {
+		print "\033[31m" $0 "\033[0m"
+		next
+	}
+}
+
+#Stop error block when normal log resumes
+/INFO|WARN/ {
+	in_error=0
+}
+
+#Colour other levels
+/INFO/ {print "\033[36m" $0 "\033[0m"; next}
+/WARN/ {print "\033[33m" $0 "\033[0m"; next}
+
+#Exit
+/REPORT RequestId:/ {
+	print;
+	exit
+}
+
+#Print
+{print}
+'
+
+#Lambda response, pretty-printed
+jq '
+  .body |= (
+    if type == "string"
+    then (try fromjson catch .)
+    else .
+    end
+  )
+' response.json
+
+unset MSYS_NO_PATHCONV
+rm -f function.zip
+rm -f response.json
