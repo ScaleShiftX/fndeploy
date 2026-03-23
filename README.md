@@ -3,10 +3,9 @@ A fast CI/CD tool for uploading, invoking, and logging lambdas - without having 
 
 ## Global Usage
 - Put the deploy file somewhere permanent. The file is a bash shell script but **leave it without any extension** (ex: `"C:\Users\scale\Files\Dev\deploy\deploy"`)
-- Run `nano ~/.bashrc` in a Bash terminal
-- Add the deploy file to path by putting this at the bottom of that file (substituting your path): `export PATH="$PATH:/c/Users/scale/Files/Dev/deploy"`
+- Add the deploy file to path by running this in a Bash terminal (substituting your path): `echo 'export PATH="$PATH:/c/Users/scale/Files/Dev/deploy"' >> ~/.bashrc`
 - Reload your terminal: `source ~/.bashrc`
-- Run it in a Bash terminal (ex: `deploy`)
+- Run it: `deploy`
 
 ## Portable Usage (not recommended)
 - Save the deploy file as a `.sh` file type (ex: `deploy.sh`)

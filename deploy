@@ -29,8 +29,8 @@ BEGIN {
 	#Remove prefix: timestamp + container 
 	gsub(/^[0-9T:\.\+\-]+ [0-9\/]+\[\$LATEST\][a-f0-9]+ /, "", $0)
 
-	#Remove request IDs
-	gsub(/[a-f0-9\-]{36}/, "", $0)
+	#Remove request IDs (this also removes UUIDs...)
+	#gsub(/[a-f0-9\-]{36}/, "", $0)
 
 	#Skip excess start and end lines
 	if ($0 ~ /^(INIT_START|START RequestId|END RequestId)/) next
