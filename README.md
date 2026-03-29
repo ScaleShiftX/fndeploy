@@ -1,14 +1,15 @@
-A fast CI/CD tool for uploading, invoking, and logging lambdas - without having to wait on GitHub Actions. Intended for testing which would be small enough to be a pain for git commits/pushes.
+# Lambda Function Deploy
+For AWS Lambdas. A fast CI/CD tool for uploading, invoking, and logging lambdas - without having to wait on or go through GitHub Actions. Intended for rapid/incremental iteration where commits would not be useful.
 <img width="1170" height="445" alt="screenshot" src="screenshot.png" />
 
 ## Installation
-- Put the deploy file somewhere permanent. The file is a Bash shell script but **leave it without any extension** (ex: `"C:\Users\scale\Files\Dev\deploy\deploy"`)
-- Add the deploy file to path by running this in a Bash terminal (substituting your path - be careful to use POSIX format here): `echo 'export PATH="$PATH:/c/Users/scale/Files/Dev/deploy"' >> ~/.bashrc`
+- Put the fndeploy file somewhere permanent. The file is a Bash shell script but **leave it without any extension** (ex: `"C:\Users\scale\Files\Dev\fndeploy\fndeploy"`)
+- Add the fndeploy file to path by running this in a Bash terminal (substituting your path - be careful to use POSIX format here): `echo 'export PATH="$PATH:/c/Users/scale/Files/Dev/fndeploy"' >> ~/.bashrc`
 - Reload your terminal: `source ~/.bashrc`
 
 ## Running
 - Navigate to the folder of your lambda (ex: `cd "C:\Users\scale\Files\Dev\quickops\lambda\migrateDb"`)
-- Run `deploy`, with optional flags (ex: `deploy -u` if you want to upload only and skip invocation)
+- Run `fndeploy`, with optional flags (ex: `fndeploy -u` if you want to upload only and skip invocation)
 
 ## Arguments
 | Flag | Description |

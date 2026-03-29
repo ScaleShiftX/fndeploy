@@ -133,12 +133,12 @@ BEGIN {
 #If .body is JSON string, try to parse it. If parsing fails, print raw .body
 #Else, .body is already object, so print it as it already is
 jq -r '
-  .body = (
-    if (.body | type) == "string"
-    then (try (.body | fromjson) catch .body)
-    else .body
-    end
-  )
+	.body = (
+		if (.body | type) == "string"
+		then (try (.body | fromjson) catch .body)
+		else .body
+		end
+	)
 ' response.json
 
 rm -f function.zip
